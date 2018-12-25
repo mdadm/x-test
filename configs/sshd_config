@@ -1,0 +1,4 @@
+PermitRootLogin no
+StrictModes yes
+PubkeyAuthentication yes
+PermitEmptyPasswords no
