@@ -45,7 +45,7 @@ Vagrant.configure("2") do |config|
         puppet.vm.provision "file", source: "~/projects/x-test/configs/sshd_config", destination: "sshd_config"
         # Copy config file from host to guests for puppet-fileserver
         puppet.vm.provision "file", source: "~/projects/x-test/configs/fileserver.conf", destination: "fileserver.conf"
-        # Copy manifest file from host to guests for sshd
+        # Copy manifests file from host to guests for sshd
         puppet.vm.provision "file", source: "~/projects/x-test/manifests/x-test.pp", destination: "x-test.pp"
         # Setup Puppet-server
         puppet.vm.provision "shell", path: "scripts/install_puppet_server.sh", privileged: true

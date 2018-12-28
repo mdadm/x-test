@@ -16,8 +16,18 @@ apt-get install puppetserver -y
 # Configuring Puppet-server
 echo -e "[agent]\nserver = puppet" > /etc/puppetlabs/puppet/puppet.conf
 
-# Waiting cert-request from Puppet-agents
-sleep 60
+# Waiting for cert-request from Puppet-agents
+echo "Waiting for cert-request from Puppet-agents..."
+
+SECS=60
+
+while [[ 0 -ne $SECS ]]; do
+    echo "$SECS sec ..."
+    sleep 1
+    SECS=$[$SECS-1]
+done
+
+echo "Done!..."
 
 # List and Signing cert from Puppet-agents
 sudo /opt/puppetlabs/bin/puppet cert list --all
@@ -26,13 +36,13 @@ sudo /opt/puppetlabs/bin/puppet cert sign --all
 # Copying config to Puppet fileserver
 cp fileserver.conf /etc/puppetlabs/puppet
 
-
 # Copying Puppet-manifests to Puppet-server
 cp x-test.pp /etc/puppetlabs/code/environments/production/manifests
+cp create_ssh_key.pp /etc/puppetlabs/code/environments/production/manifests
 
-# Cheking and creating folder for Puppet fileserver if not exist
+# Checking and creating folder for Puppet fileserver if not exist
 if [ ! -d '/etc/puppetlabs/code/files' ]; then
-    echo "Directory /etc/puppetlabs/code/files not found, creating...."
+    echo "Directory /etc/puppetlabs/code/files not found, creating..."
     mkdir /etc/puppetlabs/code/files
     echo "...done!"
 else
@@ -40,4 +50,13 @@ else
 fi
 
 # Copying config for sshd
-cp sshd_config /etc/puppetlabs/code/files
+cp sshd_config /etc/puppetlabs/code/files/
+
+# Checking and creating folder for SSH configs and files if not exist
+if [ ! -d '/etc/puppetlabs/code/files/sshconfig/' ]; then
+    echo "Directory /etc/puppetlabs/code/files/sshconfig/ not found, creating..."
+    mkdir /etc/puppetlabs/code/files/sshconfig/
+    echo "...done!"
+else
+    echo "Directory /etc/puppetlabs/code/files/sshconfig/ exist, continue..."
+fi
