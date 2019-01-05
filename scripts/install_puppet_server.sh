@@ -38,7 +38,6 @@ cp fileserver.conf /etc/puppetlabs/puppet
 
 # Copying Puppet-manifests to Puppet-server
 cp x-test.pp /etc/puppetlabs/code/environments/production/manifests
-cp create_ssh_key.pp /etc/puppetlabs/code/environments/production/manifests
 
 # Checking and creating folder for Puppet fileserver if not exist
 if [ ! -d '/etc/puppetlabs/code/files' ]; then
