@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
 
   end
 
-  # Specifing parameters for agents
+  # Specifing parameters for servers
   (1..$srv_quant).each do |i|
       config.vm.define "puppet" do |puppet|
         puppet.vm.hostname = "puppet"
@@ -47,6 +47,7 @@ Vagrant.configure("2") do |config|
         puppet.vm.provision "file", source: "~/projects/x-test/configs/fileserver.conf", destination: "fileserver.conf"
         # Copy manifests file from host to guests for sshd
         puppet.vm.provision "file", source: "~/projects/x-test/manifests/x-test.pp", destination: "x-test.pp"
+        puppet.vm.provision "file", source: "~/projects/x-test/manifests/ssh_key.pp", destination: "ssh_key.pp"
         # Setup Puppet-server
         puppet.vm.provision "shell", path: "scripts/install_puppet_server.sh", privileged: true
         end

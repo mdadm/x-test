@@ -7,14 +7,35 @@ dpkg -i puppetlabs-release-pc1-xenial.deb
 # Updating lists of packages from repositories
 apt-get update -y
 
+# Installing Puppet-agent
+apt-get install puppet-agent
+
+# Starting of Puppet-agent
+/opt/puppetlabs/bin/puppet resource service puppet ensure=running enable=true
+
+# Configuring Puppet-agent
+echo -e "[main]\ncername = puppet\nserver = puppet" > /etc/puppetlabs/puppet/puppet.conf
+
+# Installing SQlite
+apt-get install sqlite -y
+
 # Installing Puppet-server
 apt-get install puppetserver -y
 
 # Starting of Puppet-server
 /opt/puppetlabs/bin/puppet resource service puppetserver ensure=running enable=true
+#/opt/puppetlabs/bin/puppet resource package puppetdb-termini ensure=latest
 
-# Configuring Puppet-server
-echo -e "[agent]\nserver = puppet" > /etc/puppetlabs/puppet/puppet.conf
+# Installing PuppetDB as module
+sudo /opt/puppetlabs/bin/puppet module install puppetlabs-puppetdb
+
+# Starting PuppetDB
+# sudo /opt/puppetlabs/bin/puppet resource service puppetdb ensure=running enable=true
+
+# Configuring Puppet-server and PuppetDB
+sudo sh -c 'echo "[agent]\nserver = puppet\n\n[master]\nstoreconfigs = true\nstoreconfigs_backend = puppetdb" > /etc/puppetlabs/puppet/puppet.conf'
+sudo sh -c 'echo "[main]\nserver = puppet\nport = 8081" > /etc/puppetlabs/puppet/puppetdb.conf'
+sudo sh -c 'echo "---\nmaster:\n  facts:\n    terminus: puppetdb\n    cache: yaml" > /etc/puppetlabs/puppet/routes.yaml'
 
 # Waiting for cert-request from Puppet-agents
 echo "Waiting for cert-request from Puppet-agents..."
@@ -38,6 +59,7 @@ cp fileserver.conf /etc/puppetlabs/puppet
 
 # Copying Puppet-manifests to Puppet-server
 cp x-test.pp /etc/puppetlabs/code/environments/production/manifests
+cp ssh_key.pp /etc/puppetlabs/code/environments/production/manifests
 
 # Checking and creating folder for Puppet fileserver if not exist
 if [ ! -d '/etc/puppetlabs/code/files' ]; then
@@ -59,3 +81,6 @@ if [ ! -d '/etc/puppetlabs/code/files/sshconfig/' ]; then
 else
     echo "Directory /etc/puppetlabs/code/files/sshconfig/ exist, continue..."
 fi
+
+# Applying Puppet-manifest for Puppet-server
+sudo /opt/puppetlabs/bin/puppet agent --test

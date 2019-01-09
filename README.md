@@ -34,4 +34,4 @@ Test task for X-lla
     * cd x-test
     * vagrant up
     
-The virtual machines will installed, configured and started automatically. You can see the list of running servers by command "vagrant global-status" and can connect to any of those by command "vagrant ssh [name of virtual machines]"
+The virtual machines will installed, configured and started automatically. You can see the list of running servers by command "vagrant global-status" and can connect to any of those by command "vagrant ssh [name of virtual machine]"
