@@ -16,15 +16,12 @@ apt-get install puppet-agent
 # Configuring Puppet-agent
 echo -e "[main]\ncername = puppet\nserver = puppet" > /etc/puppetlabs/puppet/puppet.conf
 
-# Installing SQlite
-apt-get install sqlite -y
-
 # Installing Puppet-server
 apt-get install puppetserver -y
 
 # Starting of Puppet-server
 /opt/puppetlabs/bin/puppet resource service puppetserver ensure=running enable=true
-#/opt/puppetlabs/bin/puppet resource package puppetdb-termini ensure=latest
+/opt/puppetlabs/bin/puppet resource package puppetdb-termini ensure=latest
 
 # Installing PuppetDB as module
 sudo /opt/puppetlabs/bin/puppet module install puppetlabs-puppetdb
@@ -33,9 +30,10 @@ sudo /opt/puppetlabs/bin/puppet module install puppetlabs-puppetdb
 # sudo /opt/puppetlabs/bin/puppet resource service puppetdb ensure=running enable=true
 
 # Configuring Puppet-server and PuppetDB
-sudo sh -c 'echo "[agent]\nserver = puppet\n\n[master]\nstoreconfigs = true\nstoreconfigs_backend = puppetdb" > /etc/puppetlabs/puppet/puppet.conf'
-sudo sh -c 'echo "[main]\nserver = puppet\nport = 8081" > /etc/puppetlabs/puppet/puppetdb.conf'
+sudo sh -c 'echo "[agent]\nserver = puppet\n\n[master]\nstoreconfigs = true\nstoreconfigs_backend = puppetdb\nreports = store,puppetdb" > /etc/puppetlabs/puppet/puppet.conf'
+sudo sh -c 'echo "[main]\nserver_urls = https://puppet:8081" > /etc/puppetlabs/puppet/puppetdb.conf'
 sudo sh -c 'echo "---\nmaster:\n  facts:\n    terminus: puppetdb\n    cache: yaml" > /etc/puppetlabs/puppet/routes.yaml'
+sudo chown -R puppet:puppet '/etc/puppetlabs/puppet/'
 
 # Waiting for cert-request from Puppet-agents
 echo "Waiting for cert-request from Puppet-agents..."
@@ -84,3 +82,13 @@ fi
 
 # Applying Puppet-manifest for Puppet-server
 sudo /opt/puppetlabs/bin/puppet agent --test
+
+# Enabling storeconfig on Puppet-server
+echo " "
+echo "Enabling storeconfig on Puppet-server..."
+sudo /opt/puppetlabs/puppet/bin/puppet config set storeconfigs true
+sudo service puppetserver restart
+echo " "
+
+echo " "
+echo "...setup of Puppet server complete!"

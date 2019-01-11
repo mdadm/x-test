@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 # Specifing the number of agents
-$srv_quant = 1
+# $srv_quant = 1
 $agnt_quant = 2
 
 Vagrant.configure("2") do |config|
@@ -35,7 +35,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Specifing parameters for servers
-  (1..$srv_quant).each do |i|
+  #(1..$srv_quant).each do |i|
       config.vm.define "puppet" do |puppet|
         puppet.vm.hostname = "puppet"
         puppet.vm.network "private_network", ip: "192.168.1.10"
@@ -52,7 +52,7 @@ Vagrant.configure("2") do |config|
         puppet.vm.provision "shell", path: "scripts/install_puppet_server.sh", privileged: true
         end
       end
-  end
+  #end
 end
 
 

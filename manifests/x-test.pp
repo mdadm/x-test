@@ -21,13 +21,13 @@ node default {
 
   }
 
-  file { '/home/trial/.ssh/authorized_keys':
-    ensure  => 'file',
-    owner   => 'trial',
-    group   => 'trial',
-    mode    => '0600',
-
-}
+#  file { '/home/trial/.ssh/authorized_key':
+#    ensure  => 'file',
+#    owner   => 'trial',
+#    group   => 'trial',
+#    mode    => '0600',
+#
+#}
 
   exec { "create ssh-key for user 'trial'":
     command => "ssh-keygen -f '/home/trial/.ssh/id_rsa'",
