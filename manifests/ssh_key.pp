@@ -1,22 +1,14 @@
 class ssh_key {
 
-#  file { '/home/trial/.ssh/authorized_key':
-#    ensure => file,
-#    owner  => trial,
-#    group  => trial,
-#    mode   => '0644',
-#    before => Sshkey[ "${::fqdn}_rsa" ],
-#  }
-
   @@sshkey { "${::fqdn}_rsa":
     ensure       => present,
-    key          => $::sshrsakey,
+    key          => $::user_rsa_fact,
     type         => rsa,
+    target       => '/home/trial/.ssh/authorized_keys'
   }
 
   Sshkey <<| |>>
 
-  notify{"ssh_key class: $hostname $::sshrsakey":}
+  notify{"ssh_key class: $::user_rsa_fact":}
 
 }
-

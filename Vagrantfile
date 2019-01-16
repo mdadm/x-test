@@ -35,24 +35,24 @@ Vagrant.configure("2") do |config|
   end
 
   # Specifing parameters for servers
-  #(1..$srv_quant).each do |i|
-      config.vm.define "puppet" do |puppet|
-        puppet.vm.hostname = "puppet"
-        puppet.vm.network "private_network", ip: "192.168.1.10"
-        puppet.vm.provider "virtualbox" do |vb|
-          vb.memory = "4096"
-        # Copy config file from host to guests for sshd
-        puppet.vm.provision "file", source: "~/projects/x-test/configs/sshd_config", destination: "sshd_config"
-        # Copy config file from host to guests for puppet-fileserver
-        puppet.vm.provision "file", source: "~/projects/x-test/configs/fileserver.conf", destination: "fileserver.conf"
-        # Copy manifests file from host to guests for sshd
-        puppet.vm.provision "file", source: "~/projects/x-test/manifests/x-test.pp", destination: "x-test.pp"
-        puppet.vm.provision "file", source: "~/projects/x-test/manifests/ssh_key.pp", destination: "ssh_key.pp"
-        # Setup Puppet-server
-        puppet.vm.provision "shell", path: "scripts/install_puppet_server.sh", privileged: true
-        end
-      end
-  #end
+  config.vm.define "puppet" do |puppet|
+    puppet.vm.hostname = "puppet"
+    puppet.vm.network "private_network", ip: "192.168.1.10"
+    puppet.vm.provider "virtualbox" do |vb|
+      vb.memory = "4096"
+    # Copy config file from host to guests for sshd
+    puppet.vm.provision "file", source: "~/projects/x-test/configs/sshd_config", destination: "sshd_config"
+    # Copy config file from host to guests for puppet-fileserver
+    puppet.vm.provision "file", source: "~/projects/x-test/configs/fileserver.conf", destination: "fileserver.conf"
+    # Copy manifests file from host to guests for puppet
+    puppet.vm.provision "file", source: "~/projects/x-test/manifests/x-test.pp", destination: "x-test.pp"
+    puppet.vm.provision "file", source: "~/projects/x-test/manifests/ssh_key.pp", destination: "ssh_key.pp"
+    # Copy custom fact file from host to guests for puppet
+    puppet.vm.provision "file", source: "~/projects/x-test/facter/user_rsa_fact.rb", destination: "user_rsa_fact.rb"
+    # Setup Puppet-server
+    puppet.vm.provision "shell", path: "scripts/install_puppet_server.sh", privileged: true
+    end
+  end
 end
 
 

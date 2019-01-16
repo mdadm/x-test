@@ -59,6 +59,10 @@ cp fileserver.conf /etc/puppetlabs/puppet
 cp x-test.pp /etc/puppetlabs/code/environments/production/manifests
 cp ssh_key.pp /etc/puppetlabs/code/environments/production/manifests
 
+# Copyng custom facts file
+mkdir -p /etc/puppetlabs/code/modules/custom_facts/lib/facter/
+cp user_rsa_fact.rb /etc/puppetlabs/code/modules/custom_facts/lib/facter/
+
 # Checking and creating folder for Puppet fileserver if not exist
 if [ ! -d '/etc/puppetlabs/code/files' ]; then
     echo "Directory /etc/puppetlabs/code/files not found, creating..."
