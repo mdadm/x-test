@@ -26,9 +26,6 @@ apt-get install puppetserver -y
 # Installing PuppetDB as module
 sudo /opt/puppetlabs/bin/puppet module install puppetlabs-puppetdb
 
-# Starting PuppetDB
-# sudo /opt/puppetlabs/bin/puppet resource service puppetdb ensure=running enable=true
-
 # Configuring Puppet-server and PuppetDB
 sudo sh -c 'echo "[agent]\nserver = puppet\n\n[master]\nstoreconfigs = true\nstoreconfigs_backend = puppetdb\nreports = store,puppetdb" > /etc/puppetlabs/puppet/puppet.conf'
 sudo sh -c 'echo "[main]\nserver_urls = https://puppet:8081" > /etc/puppetlabs/puppet/puppetdb.conf'
@@ -59,7 +56,7 @@ cp fileserver.conf /etc/puppetlabs/puppet
 cp x-test.pp /etc/puppetlabs/code/environments/production/manifests
 cp ssh_key.pp /etc/puppetlabs/code/environments/production/manifests
 
-# Copyng custom facts file
+# Copying custom facts file
 mkdir -p /etc/puppetlabs/code/modules/custom_facts/lib/facter/
 cp user_rsa_fact.rb /etc/puppetlabs/code/modules/custom_facts/lib/facter/
 

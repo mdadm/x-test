@@ -9,6 +9,6 @@ class ssh_key {
 
   Sshkey <<| |>>
 
-  notify{"ssh_key class: $::user_rsa_fact":}
+#  notify{"ssh_key class: $::user_rsa_fact":}
 
 }

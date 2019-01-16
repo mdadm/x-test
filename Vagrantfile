@@ -2,8 +2,7 @@
 # vi: set ft=ruby :
 
 # Specifing the number of agents
-# $srv_quant = 1
-$agnt_quant = 2
+$agnt_quant = 3
 
 Vagrant.configure("2") do |config|
 
